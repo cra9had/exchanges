@@ -14,3 +14,4 @@ pydantic_core==2.18.2
 python-dotenv==1.0.1
 typing_extensions==4.11.0
 yarl==1.9.4
+aiogram-dialog==2.1.0

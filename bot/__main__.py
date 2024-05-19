@@ -6,7 +6,9 @@ from os import getenv
 import logging
 from aiogram_dialog import Dialog, DialogManager, StartMode, Window, setup_dialogs
 from dotenv import load_dotenv, find_dotenv
-from bot.dialogs.start import start_dialog
+from bot.dialogs.start import start
+from bot.dialogs.cabinet import cabinet
+from bot.dialogs.buy_menu import buy_menu
 from bot.handlers.default_cmd import router as start_router
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
@@ -25,7 +27,7 @@ async def main() -> None:
     dp.include_routers(start_router)
 
     # MAIN ROUTER REGISTRATION MUST BE UPPER THAN AIOGRAM_DIALOG routers
-    dp.include_routers(start_dialog)
+    dp.include_routers(start, cabinet, buy_menu)
     await dp.start_polling(bot)
 
 

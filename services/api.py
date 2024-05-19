@@ -10,16 +10,14 @@ from dotenv import load_dotenv, find_dotenv
 
 from services.const import CB_GET_EXCHANGE_RATE_URL, COINCAP_MAIN_URL, TIMEOUT_RETRIES
 
+logger = logging.getLogger(__file__)
+
 load_dotenv(find_dotenv())
 
 COINCAP_HEADERS = {
     'Accept-Encoding': 'gzip',
     'Authorization': f'Bearer {os.getenv("API_KEY")}'
 }
-
-print(COINCAP_HEADERS)
-
-logger = logging.getLogger(__file__)
 
 
 class Exchanger:
@@ -64,7 +62,18 @@ class Exchanger:
         return await Exchanger._get_bank_curr_exchange_rates(curr_char_code='EUR')
 
     @staticmethod
-    async def _get_currency(currency_code: Literal['bitcoin', 'ethereum', 'tether', 'usd-coin', 'tron'] | str):
+    async def _get_currency(currency_code: Literal['bitcoin', 'ethereum', 'tether', 'usd-coin', 'tron',
+    'usd', 'euro'] | str):
+        if currency_code == 'usd':
+            return {'data': {'priceUsd': 1}}
+        elif currency_code == 'euro':
+            data = await Exchanger.get_usd_and_euro_exchange_rates()
+            usd, euro = data['usd'], data['euro']
+
+            if not usd or not euro:
+                return None
+            return {'data': {'priceUsd': float(euro) / float(usd)}}
+
         for i in range(TIMEOUT_RETRIES):
             try:
                 async with aiohttp.ClientSession(timeout=ClientTimeout(1)) as session:
@@ -88,7 +97,6 @@ class Exchanger:
             return None
 
         dollar_to_rub = await Exchanger.get_usd_exchange_rates()
-        print(rub_value, dollar_to_rub, currency['data']['priceUsd'])
         result_curr_value = rub_value / dollar_to_rub / float(currency.get('data').get('priceUsd'))
 
         return result_curr_value

@@ -12,4 +12,7 @@ EXCHANGE_CURRS_BTN_TEXTS = {
     'litecoin': "Litecoin - LTC",
     'usdt': "USDT - TRC20",
     'monero': "Monero - XMR",
+    'dollar': "Доллар $",
+    'euro': "Евро €",
+    "item_exchange": "Оплата товара",
 }

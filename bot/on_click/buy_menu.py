@@ -23,7 +23,7 @@ async def go_input_curr_value(callback: CallbackQuery, button: Button, manager: 
     for key, value in EXCHANGE_CURRS_BTN_TEXTS.items():
 
         if key in callback.data:
-            manager.dialog_data['exchange_currency'] = {'key': key, 'value': value}
+            manager.dialog_data['exchange_currency'] = {'key': key, 'name': value}
 
 
 async def input_delivery_type(callback: CallbackQuery, button: Button, manager: DialogManager):

@@ -5,7 +5,7 @@ from typing import Literal
 
 import aiohttp
 
-from services.const import CB_GET_EXCHANGE_RATE_URL
+from services.const import CB_GET_EXCHANGE_RATE_URL, COINCAP_MAIN_URL
 
 logger = logging.getLogger(__file__)
 
@@ -52,5 +52,27 @@ class Exchanger:
         return await Exchanger._get_bank_curr_exchange_rates(curr_char_code='EUR')
 
     @staticmethod
-    async def convert
-    url = 'https://api.coincap.io/v2/assets/monero'
+    async def _get_currency(currency_code: Literal['bitcoin', 'ethereum', 'tether', 'usd-coin', 'tron'] | str):
+        try:
+            async with aiohttp.ClientSession() as session:
+                r = await session.get(COINCAP_MAIN_URL + '/' + currency_code)
+                if r.status != 200:
+                    logging.error(f"Request to {currency_code} failed with status {r.status}")
+                    return None
+            return await r.json()
+        except aiohttp.ClientError as e:
+            logging.error(f"aiohttp ClientError: {e}")
+            return None
+
+    @staticmethod
+    async def get_curr_value_in_rub(rub_value, currency_code):
+        currency = await Exchanger._get_currency(currency_code)
+        if not currency:
+            logger.error(f"Can't get currency from {currency_code}")
+            return None
+
+        dollar_to_rub = await Exchanger.get_usd_exchange_rates()
+
+        result_curr_value = rub_value / dollar_to_rub / currency.get('priceUsd')
+
+        return result_curr_value

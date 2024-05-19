@@ -9,8 +9,8 @@ MY_CURRS_BTN_TEXTS = {
 
 EXCHANGE_CURRS_BTN_TEXTS = {
     'bitcoin': "Bitcoin - BTC",
-    'litecoin': "Litecoin - LTC",
-    'usdt': "USDT - TRC20",
+    'ethereum': "Ethereum - ETH",
+    'tether': "Tether - USDT",
     'monero': "Monero - XMR",
     'dollar': "Доллар $",
     'euro': "Евро €",

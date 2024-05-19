@@ -12,7 +12,7 @@ EXCHANGE_CURRS_BTN_TEXTS = {
     'ethereum': "Ethereum - ETH",
     'tether': "Tether - USDT",
     'monero': "Monero - XMR",
-    'dollar': "Доллар $",
+    'usd': "Доллар $",
     'euro': "Евро €",
     "item_exchange": "Оплата товара",
 }

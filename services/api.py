@@ -1,11 +1,23 @@
 import asyncio
 import logging
+import os
 import xml.etree.ElementTree as ET
 from typing import Literal
 
 import aiohttp
+from aiohttp import ClientTimeout
+from dotenv import load_dotenv, find_dotenv
 
-from services.const import CB_GET_EXCHANGE_RATE_URL, COINCAP_MAIN_URL
+from services.const import CB_GET_EXCHANGE_RATE_URL, COINCAP_MAIN_URL, TIMEOUT_RETRIES
+
+load_dotenv(find_dotenv())
+
+COINCAP_HEADERS = {
+    'Accept-Encoding': 'gzip',
+    'Authorization': f'Bearer {os.getenv("API_KEY")}'
+}
+
+print(COINCAP_HEADERS)
 
 logger = logging.getLogger(__file__)
 
@@ -53,16 +65,20 @@ class Exchanger:
 
     @staticmethod
     async def _get_currency(currency_code: Literal['bitcoin', 'ethereum', 'tether', 'usd-coin', 'tron'] | str):
-        try:
-            async with aiohttp.ClientSession() as session:
-                r = await session.get(COINCAP_MAIN_URL + '/' + currency_code)
-                if r.status != 200:
-                    logging.error(f"Request to {currency_code} failed with status {r.status}")
-                    return None
-            return await r.json()
-        except aiohttp.ClientError as e:
-            logging.error(f"aiohttp ClientError: {e}")
-            return None
+        for i in range(TIMEOUT_RETRIES):
+            try:
+                async with aiohttp.ClientSession(timeout=ClientTimeout(1)) as session:
+                    session.headers.update(COINCAP_HEADERS)
+                    r = await session.get(COINCAP_MAIN_URL + '/' + currency_code)
+                    if r.status != 200:
+                        logging.error(f"Request to {currency_code} failed with status {r.status}")
+                        return None
+                return await r.json()
+            except aiohttp.ClientError as e:
+                logging.error(f"aiohttp ClientError: {e}")
+                return None
+            except asyncio.TimeoutError as e:
+                continue
 
     @staticmethod
     async def get_curr_value_in_rub(rub_value, currency_code):
@@ -72,7 +88,7 @@ class Exchanger:
             return None
 
         dollar_to_rub = await Exchanger.get_usd_exchange_rates()
-
-        result_curr_value = rub_value / dollar_to_rub / currency.get('priceUsd')
+        print(rub_value, dollar_to_rub, currency['data']['priceUsd'])
+        result_curr_value = rub_value / dollar_to_rub / float(currency.get('data').get('priceUsd'))
 
         return result_curr_value

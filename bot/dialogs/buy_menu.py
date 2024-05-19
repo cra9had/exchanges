@@ -67,9 +67,9 @@ buy_menu = Dialog(
     Window(
         Multi(
             Format("💸 Ваша валюта - {my_currency_text}"),
-            Format("💱 Валюта для обмена - {exchange_currency}"),
+            Format("💱 Валюта для обмена - {exchange_currency_text}"),
             Format("🏷️ Сумма для обмена - {my_currency_value} ({my_currency_text}):"),
-            Const("📝 Вы получите :ЗДЕСЬ БУДЕТ РАСЧЕТ ВАЛЮТЫ ПО КУРСУ ИЗ API:"),
+            Format("📝 Вы получите {exchange_curr_value} ({exchange_currency_text})"),
             sep='\n\n',
         ),
         SwitchTo(text=Const('➡️ Продолжить'), id='confirm_inputs_click', state=BuyMenuSG.input_credentials),

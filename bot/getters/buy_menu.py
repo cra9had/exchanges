@@ -40,8 +40,8 @@ async def get_input_credentials(dialog_manager: DialogManager, **kwargs):
 async def get_operator_credentials(dialog_manager: DialogManager, **kwargs):
     op_credentials_data = OP_CREDENTIALS
     my_currency = dialog_manager.dialog_data['my_currency']
-    output_credentials = f'К оплате <b>{my_currency.get("value")}</b> {my_currency.get("name")}'
-    output_credentials += '💳 <b>Реквизиты для оплаты</b>\n\n'
+    output_credentials = f'К оплате <b>{my_currency.get("value")}</b> {my_currency.get("text")}\n'
+    output_credentials += '💳 <b>Реквизиты для оплаты:</b>\n\n'
     for credentials in op_credentials_data.values():
         output_credentials += f'💸 {credentials["name"]} <code>{credentials["credential"]}</code>\n'
 

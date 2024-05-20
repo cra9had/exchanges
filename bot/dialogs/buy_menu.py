@@ -22,7 +22,8 @@ from aiogram_dialog.widgets.text import Const, Format, Multi
 
 from bot.const.buy_menu import CHOOSE_MY_CURR_TEXT, CHOOSE_EXCHANGE_CURR_TEXT, EXCHANGE_CURRS_BTN_TEXTS
 from bot.const.cabinet import SUPPORT_BTN_TEXT, BUY_BTN_TEXT, SUPPORT_BTN_URL, CABINET_MSG_TEXT
-from bot.getters.buy_menu import get_my_currency, get_all_currs_choice, get_my_curr_input_values, get_input_credentials
+from bot.getters.buy_menu import get_my_currency, get_all_currs_choice, get_my_curr_input_values, get_input_credentials, \
+    get_operator_credentials
 from bot.handlers.buy_menu import input_my_curr_handler, input_credentials_handler, after_payment_to_menu_handler, \
     input_payment_detals
 from bot.on_click.buy_menu import go_exchange_currency, go_input_curr_value, input_delivery_type, \
@@ -103,9 +104,10 @@ buy_menu = Dialog(
     ),
 
     Window(
-        Const("💳 Реквизиты для оплаты:"),
+        Format("{output_credentials}"),
         Next(Const("✅ Я оплатил"), id='user_confirm_payment_click'),
         state=BuyMenuSG.confirm_payment,
+        getter=get_operator_credentials,
     ),
 
     Window(

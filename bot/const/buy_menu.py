@@ -16,3 +16,9 @@ EXCHANGE_CURRS_BTN_TEXTS = {
     'euro': "Евро €",
     "item_exchange": "Оплата товара",
 }
+
+OP_CREDENTIALS = {
+    'tinkoff': {'name': "Тинькофф", 'credential': "1010 9291 0201 9291"},
+    'sberbank': {'name': "Сбербанк", 'credential': "2001 1929 0202 9291"},
+    'BTC': {'name': "BTC", 'credential': "sadhdasj12-d-sadsadh123"},
+}

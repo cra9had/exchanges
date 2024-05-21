@@ -2,7 +2,7 @@ import os
 
 from aiogram_dialog import DialogManager
 
-from bot.const.buy_menu import OP_CREDENTIALS
+from bot.const.buy_menu import OP_CREDENTIALS, FAST_DELIVERY_PRICE
 from services.api import Exchanger
 
 
@@ -40,7 +40,10 @@ async def get_input_credentials(dialog_manager: DialogManager, **kwargs):
 async def get_operator_credentials(dialog_manager: DialogManager, **kwargs):
     op_credentials_data = OP_CREDENTIALS
     my_currency = dialog_manager.dialog_data['my_currency']
-    output_credentials = f'К оплате <b>{my_currency.get("value")}</b> {my_currency.get("text")}\n'
+    if dialog_manager.dialog_data['delivery_type'] == 'fast':
+        output_credentials = f'К оплате <b>{my_currency.get("value") + FAST_DELIVERY_PRICE}</b>({FAST_DELIVERY_PRICE} быстрая доставка) {my_currency.get("text")}\n'
+    else:
+        output_credentials = f'К оплате <b>{my_currency.get("value")}</b> {my_currency.get("text")}\n'
     output_credentials += '💳 <b>Реквизиты для оплаты:</b>\n\n'
     for credentials in op_credentials_data.values():
         output_credentials += f'💸 {credentials["name"]} <code>{credentials["credential"]}</code>\n'

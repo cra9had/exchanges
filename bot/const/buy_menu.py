@@ -9,12 +9,12 @@ MY_CURRS_BTN_TEXTS = {
 
 EXCHANGE_CURRS_BTN_TEXTS = {
     'bitcoin': "Bitcoin - BTC",
-    'ethereum': "Ethereum - ETH",
+    #'ethereum': "Ethereum - ETH",
     'tether': "Tether - USDT",
-    'monero': "Monero - XMR",
+    #'monero': "Monero - XMR",
     'usd': "Доллар $",
     'euro': "Евро €",
-    "item_exchange": "Оплата товара",
+    #"item_exchange": "Оплата товара",
 }
 
 OP_CREDENTIALS = {
@@ -22,3 +22,5 @@ OP_CREDENTIALS = {
     'sberbank': {'name': "Сбербанк", 'credential': "2001 1929 0202 9291"},
     'BTC': {'name': "BTC", 'credential': "sadhdasj12-d-sadsadh123"},
 }
+
+FAST_DELIVERY_PRICE = 500
